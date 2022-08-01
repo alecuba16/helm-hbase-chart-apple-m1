@@ -11,7 +11,7 @@ data:
   bootstrap.sh: |
     #!/bin/bash
 
-    : ${HADOOP_PREFIX:=/usr/local/hadoop}
+    : ${HADOOP_PREFIX:=/opt/hadoop}
 
     . $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
 
@@ -35,7 +35,7 @@ data:
     if [[ "${HOSTNAME}" =~ "hdfs-nn" ]]; then
       mkdir -p /root/hdfs/namenode
       $HADOOP_PREFIX/bin/hdfs namenode -format -force -nonInteractive
-      sed -i s/{{ template "hbase.name" . }}-hdfs-nn/0.0.0.0/ /usr/local/hadoop/etc/hadoop/core-site.xml
+      sed -i s/{{ template "hbase.name" . }}-hdfs-nn/0.0.0.0/ /opt/hadoop/etc/hadoop/core-site.xml
       $HADOOP_PREFIX/sbin/hadoop-daemon.sh start namenode
     fi
 
@@ -282,15 +282,15 @@ data:
       <property>
         <name>yarn.application.classpath</name>
         <value>
-          /usr/local/hadoop/etc/hadoop,
-          /usr/local/hadoop/share/hadoop/common/*,
-          /usr/local/hadoop/share/hadoop/common/lib/*,
-          /usr/local/hadoop/share/hadoop/hdfs/*,
-          /usr/local/hadoop/share/hadoop/hdfs/lib/*,
-          /usr/local/hadoop/share/hadoop/mapreduce/*,
-          /usr/local/hadoop/share/hadoop/mapreduce/lib/*,
-          /usr/local/hadoop/share/hadoop/yarn/*,
-          /usr/local/hadoop/share/hadoop/yarn/lib/*
+          /opt/hadoop/etc/hadoop,
+          /opt/hadoop/share/hadoop/common/*,
+          /opt/hadoop/share/hadoop/common/lib/*,
+          /opt/hadoop/share/hadoop/hdfs/*,
+          /opt/hadoop/share/hadoop/hdfs/lib/*,
+          /opt/hadoop/share/hadoop/mapreduce/*,
+          /opt/hadoop/share/hadoop/mapreduce/lib/*,
+          /opt/hadoop/share/hadoop/yarn/*,
+          /opt/hadoop/share/hadoop/yarn/lib/*
         </value>
       </property>
     </configuration>

@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "hbase.name" . }}-hbase-rs
@@ -12,6 +12,9 @@ metadata:
     component: hbase-rs
 spec:
   serviceName: {{ template "hbase.name" . }}-hbase-rs
+  selector:
+    matchLabels:
+      app: {{ template "hadoop.name" . }}
   replicas: {{ .Values.hdfs.dataNode.replicas }}
   template:
     metadata:
@@ -21,13 +24,14 @@ spec:
         component: hbase-rs
     spec:
       affinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-          - topologyKey: "kubernetes.io/hostname"
-            labelSelector:
-              matchLabels:
-                app:  {{ template "hadoop.name" . }}
-                release: {{ .Release.Name | quote }}
-                component: hdfs-nn
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+              - topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchLabels:
+                    app:  {{ template "hadoop.name" . }}
+                    release: {{ .Release.Name | quote }}
+                    component: hdfs-nn
       terminationGracePeriodSeconds: 0
       containers:
       - name: hbase-rs

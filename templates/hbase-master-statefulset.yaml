@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "hbase.name" . }}-hbase-master
@@ -11,8 +11,12 @@ metadata:
     heritage: {{ .Release.Service }}
     component: hbase-master
 spec:
+
   serviceName: {{ template "hbase.name" . }}-hbase-master
-  replicas: 1
+  replicas: {{ .Values.hbase.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "hadoop.name" . }}
   template:
     metadata:
       labels:
@@ -21,13 +25,14 @@ spec:
         component: hbase-master
     spec:
       affinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-          - topologyKey: "kubernetes.io/hostname"
-            labelSelector:
-              matchLabels:
-                app:  {{ template "hadoop.name" . }}
-                release: {{ .Release.Name | quote }}
-                component: hdfs-nn
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+              - topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchLabels:
+                    app:  {{ template "hadoop.name" . }}
+                    release: {{ .Release.Name | quote }}
+                    component: hdfs-nn
       terminationGracePeriodSeconds: 0
       containers:
       - name: hbase-master

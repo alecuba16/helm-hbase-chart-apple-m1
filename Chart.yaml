@@ -11,3 +11,7 @@ icon: http://hadoop.apache.org/images/hadoop-logo.jpg
 maintainers:
 - name: Pierre Zemb
   email: pierre.zemb.isen@gmnail.com
+dependencies:
+  - name: zookeeper
+    version: "9.0.0"
+    repository: "https://charts.bitnami.com/bitnami"

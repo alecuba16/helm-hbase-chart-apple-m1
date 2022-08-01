@@ -1,4 +1,4 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ template "hbase.name" . }}-hdfs-nn
@@ -12,6 +12,9 @@ metadata:
     component: hdfs-nn
 spec:
   serviceName: {{ template "hbase.name" . }}-hdfs-nn
+  selector:
+    matchLabels:
+      app: {{ template "hadoop.name" . }}
   replicas: 1
   template:
     metadata:
